@@ -10,3 +10,24 @@
     float: right;
     width: 50%;
 }
+
+.bar {
+  fill: steelblue;
+}
+
+.bar:hover {
+  fill: brown;
+}
+
+.axis--x path {
+  display: none;
+}
+
+.arc text {
+  font: 10px sans-serif;
+  text-anchor: middle;
+  color: red;
+}
+
+.arc path {
+  stroke: #fff;

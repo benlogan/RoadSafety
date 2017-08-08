@@ -1,0 +1,55 @@
+make,accident_count
+FORD                ,27116
+VAUXHALL            ,23844
+VOLKSWAGEN          ,14718
+PEUGEOT             ,10432
+HONDA               ,9557
+TOYOTA              ,8512
+BMW                 ,8357
+RENAULT             ,8096
+NISSAN              ,6452
+AUDI                ,6383
+CITROEN             ,6292
+MERCEDES            ,4449
+MERCEDES-BENZ       ,4282
+FIAT                ,4249
+VOLVO               ,3796
+SUZUKI              ,3499
+YAMAHA              ,3385
+SKODA               ,3124
+SEAT                ,2587
+LAND ROVER          ,2509
+HYUNDAI             ,2505
+MINI                ,2453
+KIA                 ,2162
+MAZDA               ,2117
+MITSUBISHI          ,1402
+DAF TRUCKS          ,1396
+SCANIA              ,1157
+ALEXANDER DENNIS    ,1156
+KAWASAKI            ,1073
+PIAGGIO             ,1052
+JAGUAR              ,957
+ROVER               ,757
+LONDON TAXIS INT    ,751
+IVECO               ,734
+LEXUS               ,639
+TRIUMPH             ,637
+CHEVROLET           ,615
+MAN                 ,604
+SAAB                ,591
+APRILIA             ,488
+LEXMOTO             ,461
+MG                  ,407
+ALFA ROMEO          ,376
+DENNIS              ,359
+SMART               ,350
+SUBARU              ,327
+OPTARE              ,304
+CHRYSLER            ,303
+SYM                 ,298
+WRIGHTBUS           ,297
+RENAULT TRUCKS      ,286
+PORSCHE             ,283
+HARLEY-DAVIDSON     ,244
+JEEP                ,243

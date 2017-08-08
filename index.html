@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
     <head>
         <script src='https://api.mapbox.com/mapbox-gl-js/v0.38.0/mapbox-gl.js'></script>
@@ -5,6 +6,10 @@
         <link href="styles/main.css" rel='stylesheet' />
         <script src="https://d3js.org/d3.v4.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="scripts/chart_line.js"></script>
+        <script src="scripts/chart_bar.js"></script>
+        <script src="scripts/chart_bar_make.js"></script>
+        <script src="scripts/chart_pie.js"></script>
     </head>
     <body>
         <div id='center-page'>
@@ -16,6 +21,10 @@
                 <img id='logo' src="images/BarbicanBank.jpg"/>
             </div>
             
+            <div>
+                <h3>257846 accidents. Definition of an accident?</h3>
+            </div>
+            
             <div id='map' style='width: 1000px; height: 800px;'></div>
             
             <div id='flyControl'>
@@ -24,7 +33,23 @@
                 <button id='flyToPostcode' onclick="flyToPostcode()">Go!</button>
             </div>
             
-            <svg width="960" height="500"></svg>
+            <h2>Daily Accident Count</h2>
+            <svg id='svg_line' width="960" height="500"></svg>
+            
+            <h2>Accidents by Car Manufacturer</h2>
+            <svg id='svg_bar_make' width="960" height="500"></svg>
+            
+            <h2>Accidents by Day of Week (average over year)</h2>
+            
+            <h2>Accidents by Time of Day (average over year)</h2>
+            
+            <h2>Age of Driver</h2>
+            <svg id='svg_bar' width="960" height="500"></svg>
+            
+            <h2>Gender</h2>
+            <svg id='svg_pie' width="960" height="500"></svg>
+            Male	169251
+            Female	72046
         </div>
         <script>
           mapboxgl.accessToken = 'pk.eyJ1IjoiYjFlMW4xIiwiYSI6ImNqNjJuZWVmbzB6eTUzMm8wc2FyeTlrMjAifQ.FhydQupBLmCJuNiCCp77Jw';
@@ -60,74 +85,11 @@
                 
             });
             
-            
-            
-            
-            
-            
-            
-            
-            
-            var svg = d3.select("svg"),
-            margin = {top: 20, right: 20, bottom: 30, left: 50},
-            width = +svg.attr("width") - margin.left - margin.right,
-            height = +svg.attr("height") - margin.top - margin.bottom,
-            g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-            var parseTime = d3.timeParse("%d/%m/%Y");
-
-            var x = d3.scaleTime()
-                .rangeRound([0, width]);
-
-            var y = d3.scaleLinear()
-                .rangeRound([height, 0]);
-
-            var line = d3.line()
-                .x(function(d) { return x(d.date); })
-                .y(function(d) { return y(d.close); });
-
-            d3.csv("data/Accidents_2015_medium.csv", function(d) {
-              d.date = parseTime(d.Date);
-              d.close = +d.Number_of_Casualties;
-              return d;
-            }, function(error, data) {
-              if (error) throw error;
-
-              x.domain(d3.extent(data, function(d) { return d.date; }));
-              y.domain(d3.extent(data, function(d) { return d.close; }));
-
-              g.append("g")
-                  .attr("transform", "translate(0," + height + ")")
-                  .call(d3.axisBottom(x))
-                .select(".domain")
-                  .remove();
-
-              g.append("g")
-                  .call(d3.axisLeft(y))
-                .append("text")
-                  .attr("fill", "#000")
-                  .attr("transform", "rotate(-90)")
-                  .attr("y", 6)
-                  .attr("dy", "0.71em")
-                  .attr("text-anchor", "end")
-                  .text("Number of Accidents");
-
-              g.append("path")
-                  .datum(data)
-                  .attr("fill", "none")
-                  .attr("stroke", "steelblue")
-                  .attr("stroke-linejoin", "round")
-                  .attr("stroke-linecap", "round")
-                  .attr("stroke-width", 1.5)
-                  .attr("d", line);
-            });
-            
-            
-            
-            
-            
-            
-            
+                
+            drawLineChart();
+            drawBarChart();
+            drawBarChartMake();
+            drawPieChart();
             
             
             function flyToPostcode() {
