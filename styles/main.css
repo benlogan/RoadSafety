@@ -1,0 +1,12 @@
+#center-page {
+     width: 1000px;
+     margin: 0 auto;
+}
+#title {
+    float: left;
+    width: 50%;
+}
+#logo {
+    float: right;
+    width: 50%;
+}

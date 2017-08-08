@@ -1,0 +1,164 @@
+<html>
+    <head>
+        <script src='https://api.mapbox.com/mapbox-gl-js/v0.38.0/mapbox-gl.js'></script>
+        <link href='https://api.mapbox.com/mapbox-gl-js/v0.38.0/mapbox-gl.css' rel='stylesheet' />
+        <link href="styles/main.css" rel='stylesheet' />
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    </head>
+    <body>
+        <div id='center-page'>
+            <div id='header'>
+                <div id='title'>
+                    <h1>Road Safety Viz</h1>
+                    <p>A series of interactive visualisations that highlight the number and nature of road traffic accidents in the UK, for 2015. More info on how this was built on this blog post...</p>
+                </div>
+                <img id='logo' src="images/BarbicanBank.jpg"/>
+            </div>
+            
+            <div id='map' style='width: 1000px; height: 800px;'></div>
+            
+            <div id='flyControl'>
+                <p>UK Postcode</p>
+                <input id='postcodeInput' value='e.g. N5 1NE'/>
+                <button id='flyToPostcode' onclick="flyToPostcode()">Go!</button>
+            </div>
+            
+            <svg width="960" height="500"></svg>
+        </div>
+        <script>
+          mapboxgl.accessToken = 'pk.eyJ1IjoiYjFlMW4xIiwiYSI6ImNqNjJuZWVmbzB6eTUzMm8wc2FyeTlrMjAifQ.FhydQupBLmCJuNiCCp77Jw';
+          var map = new mapboxgl.Map({
+            container: 'map',
+            style: 'mapbox://styles/b1e1n1/cj63a9nq14a752stjna3wp9wu',
+            center: [-0.1270069, 51.5013954], // starting position [lng, lat] - Big Ben, London, UK
+            zoom: 14 // starting zoom
+          });
+            
+            map.on('load', function() {
+
+                map.on('click', 'road-safety-tileset', function (e) {
+                    // center on screen
+                    map.flyTo({center: e.features[0].geometry.coordinates});
+                    
+                    //popup
+                    new mapboxgl.Popup()
+                        .setLngLat(e.features[0].geometry.coordinates)
+                        .setHTML(e.features[0].properties.Accident_Index)
+                        .addTo(map);
+                });
+                
+                // Change the cursor to a pointer when the mouse is over the places layer.
+                map.on('mouseenter', 'road-safety-tileset', function () {
+                    map.getCanvas().style.cursor = 'pointer';
+                });
+
+                // Change it back to a pointer when it leaves.
+                map.on('mouseleave', 'road-safety-tileset', function () {
+                    map.getCanvas().style.cursor = '';
+                });
+                
+            });
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            var svg = d3.select("svg"),
+            margin = {top: 20, right: 20, bottom: 30, left: 50},
+            width = +svg.attr("width") - margin.left - margin.right,
+            height = +svg.attr("height") - margin.top - margin.bottom,
+            g = svg.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+            var parseTime = d3.timeParse("%d/%m/%Y");
+
+            var x = d3.scaleTime()
+                .rangeRound([0, width]);
+
+            var y = d3.scaleLinear()
+                .rangeRound([height, 0]);
+
+            var line = d3.line()
+                .x(function(d) { return x(d.date); })
+                .y(function(d) { return y(d.close); });
+
+            d3.csv("data/Accidents_2015_medium.csv", function(d) {
+              d.date = parseTime(d.Date);
+              d.close = +d.Number_of_Casualties;
+              return d;
+            }, function(error, data) {
+              if (error) throw error;
+
+              x.domain(d3.extent(data, function(d) { return d.date; }));
+              y.domain(d3.extent(data, function(d) { return d.close; }));
+
+              g.append("g")
+                  .attr("transform", "translate(0," + height + ")")
+                  .call(d3.axisBottom(x))
+                .select(".domain")
+                  .remove();
+
+              g.append("g")
+                  .call(d3.axisLeft(y))
+                .append("text")
+                  .attr("fill", "#000")
+                  .attr("transform", "rotate(-90)")
+                  .attr("y", 6)
+                  .attr("dy", "0.71em")
+                  .attr("text-anchor", "end")
+                  .text("Number of Accidents");
+
+              g.append("path")
+                  .datum(data)
+                  .attr("fill", "none")
+                  .attr("stroke", "steelblue")
+                  .attr("stroke-linejoin", "round")
+                  .attr("stroke-linecap", "round")
+                  .attr("stroke-width", 1.5)
+                  .attr("d", line);
+            });
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            function flyToPostcode() {
+                var postcode = document.getElementById("postcodeInput").value;
+                postcodeToCoordinates(postcode);
+            }
+            
+            function postcodeToCoordinates(postcode) {
+                $.ajax({
+                    url: 'http://api.postcodes.io/postcodes/' + postcode,
+                    type: 'GET',
+                    //data: 'ASIN=' + asin,
+                    success: function(data) {
+                        var coordinates = {};
+                        coordinates.longitude = data.result.longitude;
+                        coordinates.latitude = data.result.latitude;
+                        flyTo(coordinates);
+                    }
+                });
+            }
+            
+            // fly to location on map
+            function flyTo(coordinates) {
+                map.flyTo({
+                    center: [
+                        coordinates.longitude,
+                        coordinates.latitude]
+                });
+            }
+            
+        </script>
+
+    </body>
+</html>
