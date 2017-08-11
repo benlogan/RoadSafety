@@ -10,6 +10,9 @@
         <script src="scripts/chart_bar.js"></script>
         <script src="scripts/chart_bar_make.js"></script>
         <script src="scripts/chart_pie.js"></script>
+        <script src="scripts/chart_aster.js"></script>
+        <script src="scripts/viz.v1.js"></script>
+        <script src="scripts/chart_gauge.js"></script>
     </head>
     <body>
         <div id='center-page'>
@@ -37,11 +40,20 @@
             <svg id='svg_line' width="960" height="500"></svg>
             
             <h2>Accidents by Car Manufacturer</h2>
-            <svg id='svg_bar_make' width="960" height="500"></svg>
+            <div class="chartContainer">
+                <svg id='svg_bar_make' width="2500" height="500"></svg>
+            </div>
             
             <h2>Accidents by Day of Week (average over year)</h2>
             
             <h2>Accidents by Time of Day (average over year)</h2>
+            <h4>This is a 24hr Clock Face!</h4>
+            <svg id='svg_aster' width="960" height="500"></svg>
+            
+            <h2>Speed Limit</h2>
+            <h4>Number of accidents in each speed limit category</h4>
+            <svg id='svg_gauge' width="800" height="600"></svg>
+            <h4>Accident Count</h4><h4 id='speedLabel'></h4>
             
             <h2>Age of Driver</h2>
             <svg id='svg_bar' width="960" height="500"></svg>
@@ -90,7 +102,12 @@
             drawBarChart();
             drawBarChartMake();
             drawPieChart();
-            
+            //drawSunburstChart();
+            drawAsterChart();
+            // need to load viz library first...
+            $( document ).ready(function() {
+                drawGaugeChart();
+            });
             
             function flyToPostcode() {
                 var postcode = document.getElementById("postcodeInput").value;

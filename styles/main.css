@@ -12,7 +12,7 @@
 }
 
 .bar {
-  fill: steelblue;
+  fill: steelblue; /* #4682b4 */
 }
 
 .bar:hover {
@@ -31,3 +31,32 @@
 
 .arc path {
   stroke: #fff;
+}
+
+.chartContainer {
+    width: 960px;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+
+
+/* gauge */
+.label{
+	font-size:22.5px;
+	fill:#ffffff;
+	text-anchor:middle;
+	alignment-baseline:middle;
+}
+.face{
+	stroke:#c8c8c8;
+	stroke-width:2;
+}
+.minorTicks{
+	stroke-width:2;
+	stroke:white;
+}
+.majorTicks{
+	stroke:white;
+	stroke-width:3;
+}

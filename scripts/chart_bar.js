@@ -11,30 +11,31 @@ function drawBarChart() {
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
     d3.csv("data/AccidentCountByAge.csv", function(d) {
-      d.frequency = +d.Number_of_Accidents;
-      return d;
+        d.frequency = +d.Number_of_Accidents;
+        return d;
     }, function(error, data) {
-      if (error) throw error;
+        if (error) throw error;
 
-      x2.domain(data.map(function(d) { return d.Age_of_Driver; }));
-      y2.domain([0, d3.max(data, function(d) { return d.frequency; })]);
+        x2.domain(data.map(function(d) { return d.Age_of_Driver; }));
+        y2.domain([0, d3.max(data, function(d) { return d.frequency; })]);
 
-      graph.append("g")
+        graph.append("g")
           .attr("class", "axis axis--x")
           .attr("transform", "translate(0," + height + ")")
-          .call(d3.axisBottom(x2));
+          .call(d3.axisBottom(x2).tickValues([10,17,20,30,40,50,60,70,80,90]));
 
-      graph.append("g")
+        graph.append("g")
           .attr("class", "axis axis--y")
-          .call(d3.axisLeft(y2).ticks(10, "%"))
+            .call(d3.axisLeft(y2))
         .append("text")
+          .attr("fill", "#000")
           .attr("transform", "rotate(-90)")
           .attr("y", 6)
           .attr("dy", "0.71em")
           .attr("text-anchor", "end")
           .text("Number of Accidents");
 
-      graph.selectAll(".bar")
+        graph.selectAll(".bar")
         .data(data)
         .enter().append("rect")
           .attr("class", "bar")
